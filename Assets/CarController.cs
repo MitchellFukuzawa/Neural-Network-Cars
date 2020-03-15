@@ -11,14 +11,21 @@ public class CarController : MonoBehaviour
     public Transform rayFront;
     public Transform rayRightFront;
     public Transform rayRight;
+    public GameObject managerRef;
 
 
     private const float Acceleration = 80f;
     private const float TurnRate = 100;
+    private int currentCheckpoint = 0;
+    private Checkpoints[] checkpoints;
+    private float TrackLength;
+    private float Percentage = 0;
 
     private void Start()
     {
         carRigidbody = GetComponent<Rigidbody>();
+        checkpoints = managerRef.GetComponentsInChildren<Checkpoints>();
+        CalculateCheckpointPercentages();
     }
 
     // Update is called once per frame
@@ -46,7 +53,17 @@ public class CarController : MonoBehaviour
         carRigidbody.velocity = WeightVerticle * transform.forward * Acceleration;
         carRigidbody.transform.Rotate(Vector3.up * WeightHorizontal * TurnRate * Time.deltaTime);
 
+        // Percentage Calculation
+        Percentage = Vector2.Distance(checkpoints[currentCheckpoint - 1].transform.position, transform.position);
+        //Debug.Log("Current chekpoint to current position : " + Percentage);
+        if (currentCheckpoint != 1)
+            Percentage += checkpoints[currentCheckpoint - 1].AccumulatedDistance;
+        Percentage /= TrackLength;
 
+        // Clamp percentage to 100 if last checkpoint is reached
+        if (currentCheckpoint == checkpoints.Length || Percentage > 1f)
+            Percentage = 1f;
+        Debug.Log(Percentage);
     }
 
 
@@ -74,6 +91,35 @@ public class CarController : MonoBehaviour
         {
             Debug.DrawRay(position.position, direction.normalized * dist, Color.red);
             return 1;
+        }
+    }
+
+    private void CalculateCheckpointPercentages()
+    {
+        checkpoints[0].AccumulatedDistance = 0;
+        for (int i = 1; i < checkpoints.Length; i++)
+        {
+            checkpoints[i].DistanceToPrevious = Vector2.Distance(checkpoints[i].transform.position, checkpoints[i - 1].transform.position);
+            checkpoints[i].AccumulatedDistance = checkpoints[i - 1].AccumulatedDistance + checkpoints[i].DistanceToPrevious;
+        }
+        TrackLength = checkpoints[checkpoints.Length - 1].AccumulatedDistance;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Checkpoint")
+        {
+            //Check if collision is the next checkpoint it must hit
+            if (other.gameObject.GetComponent<Checkpoints>().CheckpointNumber == currentCheckpoint)
+            {
+                currentCheckpoint++;
+                //Debug.Log("PLUS");
+            }
+            else if (other.gameObject.GetComponent<Checkpoints>().CheckpointNumber == currentCheckpoint - 1 && currentCheckpoint != 1)
+            {
+                currentCheckpoint--;
+                //Debug.Log("MINUS");
+            }
         }
     }
 }
