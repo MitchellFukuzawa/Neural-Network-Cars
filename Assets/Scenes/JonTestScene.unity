@@ -542,7 +542,7 @@ GameObject:
   - component: {fileID: 362975419}
   - component: {fileID: 362975418}
   - component: {fileID: 362975422}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Sphere
   m_TagString: Checkpoint
   m_Icon: {fileID: 0}
@@ -699,7 +699,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efb75b488546acd46b8e9185009e9762, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  carPool: 10
+  carPool: 3
   car: {fileID: 6029992212318909371, guid: e9ad8f44c43f3cf4ca83519b687bcbe2, type: 3}
 --- !u!1 &582462533
 GameObject:
@@ -1087,7 +1087,7 @@ GameObject:
   - component: {fileID: 1012284214}
   - component: {fileID: 1012284213}
   - component: {fileID: 1012284217}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Sphere (3)
   m_TagString: Checkpoint
   m_Icon: {fileID: 0}
@@ -1208,7 +1208,7 @@ GameObject:
   - component: {fileID: 1098655148}
   - component: {fileID: 1098655147}
   - component: {fileID: 1098655151}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Sphere (2)
   m_TagString: Checkpoint
   m_Icon: {fileID: 0}
@@ -1422,7 +1422,7 @@ GameObject:
   - component: {fileID: 1411035802}
   - component: {fileID: 1411035801}
   - component: {fileID: 1411035805}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Sphere (6)
   m_TagString: Checkpoint
   m_Icon: {fileID: 0}
@@ -1822,7 +1822,7 @@ GameObject:
   - component: {fileID: 1470025909}
   - component: {fileID: 1470025908}
   - component: {fileID: 1470025912}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Sphere (1)
   m_TagString: Checkpoint
   m_Icon: {fileID: 0}
@@ -2222,7 +2222,7 @@ GameObject:
   - component: {fileID: 1709821122}
   - component: {fileID: 1709821121}
   - component: {fileID: 1709821125}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Sphere (5)
   m_TagString: Checkpoint
   m_Icon: {fileID: 0}
@@ -2696,7 +2696,7 @@ GameObject:
   - component: {fileID: 2108314913}
   - component: {fileID: 2108314912}
   - component: {fileID: 2108314916}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Sphere (4)
   m_TagString: Checkpoint
   m_Icon: {fileID: 0}
