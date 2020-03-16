@@ -4,50 +4,18 @@ using UnityEngine;
 
 public class NeuralNetwork : MonoBehaviour
 {
-    public List<Layer> layers = new List<Layer>();
+    public List<Layer> layers;
+    
 
-    public NeuralNetwork()
+    public void Start()
     {
         initializeLayers();
         SetRandomWeights();
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-
-
-        //float[] distances = new float[5];
-        //distances[0] = 10;
-        //distances[1] = 10;
-        //distances[2] = 10;
-        //distances[3] = 10;
-        //distances[4] = 10;
-        
-
-        //Vector2 OUTPUTS = ProccessingEvaluations(distances);
-        //Debug.Log("X: " + OUTPUTS.x + "        Y:" + OUTPUTS.y);
-    }
-
-    // Goal is to be able to pass an array of the 5 input values
-
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     // Goes through ever layer to calculate evaluations for the entire network
     public Vector2 ProccessingEvaluations(float[] inputs)
     {
-        
-
-
-        // Send inputs to first layer
-        // send the raycast distance in the neural network by first
-        // Give the first input nodes their dist evaluation.
-        
         // Input layer
         for (int i = 0; i < 5; i++)
         {
@@ -117,6 +85,8 @@ public class NeuralNetwork : MonoBehaviour
 
     public void initializeLayers()
     {
+        layers = new List<Layer>();
+
         // Creates 4 layers in the neural network
         for (int i = 0; i < 4; i++)
         {
@@ -149,7 +119,12 @@ public class NeuralNetwork : MonoBehaviour
 public class Layer
 {
     public float debug = 1;
-    public List<Neuron> neurons = new List<Neuron>();
+    public List<Neuron> neurons;
+
+    public Layer()
+    {
+        neurons = new List<Neuron>();
+    }
 }
 
 public class Neuron
@@ -158,42 +133,4 @@ public class Neuron
 
     // These are the weight going to the neuron
     public List<float> incomingWeights = new List<float>();
-
-    // This is the Input/Evaluation of the nodes coming to this neuron
-    public List<float> incomingEvaluation = new List<float>();
-
-    // Sum all the incomingWeight * incomingEvaluation together
-    public float Summation()
-    {
-        float sum = 0;
-        // Summation of values
-        for (int i = 0; i < incomingWeights.Count; i++)
-        {
-            sum += incomingWeights[i] * incomingEvaluation[i];
-        }
-
-        // Bias if we were to have one?
-        sum *= 1;
-
-        return sum;
-    }
-
-
-
-    // Takes all incoming weights and randomly assigns between 0 and 1
-    //public void SetRandomWeights()
-    //{
-    //    for (int i = 0; i < incomingWeights.Count; i++)
-    //    {
-    //        incomingWeights[i] = Random.Range(0f, 1f);
-    //    }
-    //}
-
 }
-
-// TODO:
-/* Create a recursive function that 
- * 
- * 
- * 
- */

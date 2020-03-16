@@ -28,9 +28,10 @@ public class CarController : MonoBehaviour
     private void Start()
     {
         carRigidbody = GetComponent<Rigidbody>();
+        managerRef = FindObjectOfType<Manager>().gameObject;
         checkpoints = managerRef.GetComponentsInChildren<Checkpoints>();
         CalculateCheckpointPercentages();
-        NN = new NeuralNetwork();
+        NN = GetComponent<NeuralNetwork>();
     }
 
     // Update is called once per frame
@@ -104,7 +105,7 @@ public class CarController : MonoBehaviour
         else
         {
             Debug.DrawRay(position.position, direction.normalized * dist, Color.red);
-            return 1;
+            return 11;
         }
     }
 
