@@ -31,11 +31,11 @@ public class CarController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        CreateRayCast(rayLeft, Mathf.Infinity, -transform.right);
-        CreateRayCast(rayLeftFront, Mathf.Infinity, -transform.right + transform.forward);
-        CreateRayCast(rayLeft, Mathf.Infinity, transform.forward);
-        CreateRayCast(rayLeft, Mathf.Infinity, transform.right + transform.forward);
-        CreateRayCast(rayLeft, Mathf.Infinity, transform.right);
+        CreateRayCast(rayLeft, 10, -transform.right);
+        CreateRayCast(rayLeftFront, 10, -transform.right + transform.forward);
+        CreateRayCast(rayLeft, 10, transform.forward);
+        CreateRayCast(rayLeft, 10, transform.right + transform.forward);
+        CreateRayCast(rayLeft, 10, transform.right);
 
 
         float WeightVerticle = 0;
@@ -63,7 +63,7 @@ public class CarController : MonoBehaviour
         // Clamp percentage to 100 if last checkpoint is reached
         if (currentCheckpoint == checkpoints.Length || Percentage > 1f)
             Percentage = 1f;
-        Debug.Log(Percentage);
+
     }
 
 
