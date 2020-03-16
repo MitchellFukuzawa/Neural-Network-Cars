@@ -123,7 +123,7 @@ public class NeuralNetwork : MonoBehaviour
             {
                 for (int j = 0; j < 5; j++)
                 {
-                    layers[k].neurons[i].incomingWeights.Add(Random.Range(0f, 1f));
+                    layers[k].neurons[i].incomingWeights.Add(Random.Range(-1f, 1f));
                 }
             }
         }

@@ -51,7 +51,8 @@ public class CarController : MonoBehaviour
 
         Vector2 AI_Movement = NN.ProccessingEvaluations(raycastDistances);
         WeightVerticle = AI_Movement.x;
-        WeightHorizontal = AI_Movement.y;
+        WeightHorizontal = (AI_Movement.y - .5f) * 2f;
+        print("HoreMove: " + WeightHorizontal);
         //vertMove =
 
         // User input
