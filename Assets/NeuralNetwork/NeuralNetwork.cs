@@ -57,6 +57,9 @@ public class NeuralNetwork : MonoBehaviour
 
             for (int j = 0; j < 3; j++)
             {
+                print("SizeofLayer 2: " + layers[2].neurons.Count);
+                print("SizeofLayer 3: " + layers[3].neurons[i].incomingWeights.Count);
+                
                 //             (Preivous layers' evals)         (get current layers incoming weights)
                 summation += layers[2].neurons[j].Evaluation * layers[3].neurons[i].incomingWeights[j];
             }
@@ -71,13 +74,16 @@ public class NeuralNetwork : MonoBehaviour
     // Loops through entire network to set IncomingWeights
     public void SetRandomWeights()
     {
+        // Loop through layers 4-3-2
         for (int k = 1; k < 4; k++)
         {
-            for (int i = 0; i < 4; i++)
+            // Loop through neurons
+            for (int i = 0; i < 5 - k; i++)
             {
-                for (int j = 0; j < 5; j++)
+                // init incoming weights
+                for (int j = 0; j < 6 - k; j++)
                 {
-                    layers[k].neurons[i].incomingWeights.Add(Random.Range(-1f, 1f));
+                    layers[k].neurons[i].incomingWeights.Add(.5f);
                 }
             }
         }
@@ -94,14 +100,12 @@ public class NeuralNetwork : MonoBehaviour
         }
 
         // Fill each layer with 5-4-3-2 neuron topology
-        foreach (var layer in layers)
+
+        for (int i = 0; i < 4; i++)
         {
-            for (int i = 0; i < 4; i++)
+            for (int j = 0; j < 5 - i; j++)
             {
-                for (int j = 0; j < 5 - i; j++)
-                {
-                    layer.neurons.Add(new Neuron());
-                }
+                layers[i].neurons.Add(new Neuron());
             }
         }
     }
@@ -132,5 +136,10 @@ public class Neuron
     public float Evaluation = 0;
 
     // These are the weight going to the neuron
-    public List<float> incomingWeights = new List<float>();
+    public List<float> incomingWeights;
+
+    public Neuron()
+    {
+        incomingWeights = new List<float>();
+    }
 }

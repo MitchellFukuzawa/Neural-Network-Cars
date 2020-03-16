@@ -49,16 +49,18 @@ public class CarController : MonoBehaviour
         raycastDistances[3] = CreateRayCast(rayLeft, 100, transform.right + transform.forward);
         raycastDistances[4] = CreateRayCast(rayLeft, 100, transform.right);
 
-
+        
         Vector2 AI_Movement = NN.ProccessingEvaluations(raycastDistances);
         WeightVerticle = AI_Movement.x;
         WeightHorizontal = (AI_Movement.y - .5f) * 2f;
+
         //print("HoreMove: " + WeightHorizontal);
         //vertMove =
 
         // User input
         //WeightVerticle = Input.GetAxis("Vertical");
         //WeightHorizontal = Input.GetAxis("Horizontal");
+        //print("Vertical: " + WeightHorizontal);
 
         // Clamp User Input weights
         Mathf.Clamp(WeightVerticle, -1, 1);
@@ -67,7 +69,7 @@ public class CarController : MonoBehaviour
         // Move forward
         carRigidbody.velocity = WeightVerticle * transform.forward * Acceleration;
         carRigidbody.transform.Rotate(Vector3.up * WeightHorizontal * TurnRate * Time.deltaTime);
-
+        
         // Percentage Calculation
         Percentage = Vector2.Distance(checkpoints[currentCheckpoint - 1].transform.position, transform.position);
         //Debug.Log("Current chekpoint to current position : " + Percentage);
@@ -87,7 +89,9 @@ public class CarController : MonoBehaviour
     private float CreateRayCast(Transform position, float dist, Vector3 direction)
     {
         // Bit shift the index of the layer (8) to get a bit mask
-        int layerMask = 1 << 8;
+        int layerMask = 1 << 9;
+        layerMask |= 1 << 8;
+
 
         // This would cast rays only against colliders in layer 8.
         // But instead we want to collide against everything except layer 8. The ~ operator does this, it inverts a bitmask.
@@ -105,7 +109,7 @@ public class CarController : MonoBehaviour
         else
         {
             Debug.DrawRay(position.position, direction.normalized * dist, Color.red);
-            return 11;
+            return 100;
         }
     }
 
