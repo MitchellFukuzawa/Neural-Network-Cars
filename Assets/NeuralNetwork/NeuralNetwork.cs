@@ -49,7 +49,7 @@ public class NeuralNetwork : MonoBehaviour
             }
             
 
-            layers[1].neurons[i].Evaluation = Activation(summation);
+            layers[1].neurons[i].Evaluation = Activation(summation) - .5f;
         }
 
         // OUTPUT layer: calculate evaluation for each neuron
@@ -67,7 +67,7 @@ public class NeuralNetwork : MonoBehaviour
             }
             //print("Sum :" + Activation(summation));
 
-            layers[2].neurons[i].Evaluation = Activation(summation);
+            layers[2].neurons[i].Evaluation = Activation(summation) - .5f;
         }
 
         
@@ -88,7 +88,7 @@ public class NeuralNetwork : MonoBehaviour
                 // init incoming weights
                 for (int j = 0; j < topology[k-1]; j++)
                 {
-                    layers[k].neurons[i].incomingWeights.Add(.5f);
+                    layers[k].neurons[i].incomingWeights.Add(Random.Range(-1,1));
                 }
             }
 

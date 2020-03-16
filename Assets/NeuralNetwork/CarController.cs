@@ -44,12 +44,15 @@ public class CarController : MonoBehaviour
         float[] raycastDistances = new float[4];
 
         raycastDistances[0] = CreateRayCast(rayLeft, 100, -transform.right);
-        raycastDistances[1] = CreateRayCast(rayLeftFront, 100, -transform.right + transform.forward);
-        raycastDistances[2] = CreateRayCast(rayRightFront, 100, transform.right);
-        raycastDistances[3] = CreateRayCast(rayRight, 100, transform.right + transform.forward);
+        raycastDistances[1] = CreateRayCast(rayLeft, 100, -transform.right + transform.forward);
+        raycastDistances[2] = CreateRayCast(rayLeft, 100, transform.right);
+        raycastDistances[3] = CreateRayCast(rayLeft, 100, transform.right + transform.forward);
                                   //raycastDistances[4] = 100;/*CreateRayCast(rayLeft, 100, transform.right);*/
         raycastDistances[0] *= -1;
         raycastDistances[1] *= -1;
+        raycastDistances[2] *= 1;
+        raycastDistances[3] *= 1;
+
 
 
         Vector2 AI_Movement = NN.ProccessingEvaluations(raycastDistances);
