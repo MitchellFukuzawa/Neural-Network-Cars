@@ -9,9 +9,39 @@ public class NeuralNetwork : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
+
+        //float[] distances = new float[5];
+        //distances[0] = 10;
+        //distances[1] = 10;
+        //distances[2] = 10;
+        //distances[3] = 10;
+        //distances[4] = 10;
+        
+
+        //Vector2 OUTPUTS = ProccessingEvaluations(distances);
+        //Debug.Log("X: " + OUTPUTS.x + "        Y:" + OUTPUTS.y);
+    }
+
+    // Goal is to be able to pass an array of the 5 input values
+
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+
+    // Goes through ever layer to calculate evaluations for the entire network
+    public Vector2 ProccessingEvaluations(float[] inputs)
+    {
+        layers = new List<Layer>();
+
         // Creates 4 layers in the neural network
         for (int i = 0; i < 4; i++)
+        {
             layers.Add(new Layer());
+        }
 
         // Fill each layer with 5-4-3-2 neuron topology
         foreach (var layer in layers)
@@ -27,30 +57,7 @@ public class NeuralNetwork : MonoBehaviour
 
         SetRandomWeights();
 
-        float[] distances = new float[5];
-        distances[0] = 10;
-        distances[1] = 10;
-        distances[2] = 10;
-        distances[3] = 10;
-        distances[4] = 10;
-        
 
-        Vector2 OUTPUTS = ProccessingEvaluations(distances);
-        Debug.Log("X: " + OUTPUTS.x + "        Y:" + OUTPUTS.y);
-    }
-
-    // Goal is to be able to pass an array of the 5 input values
-
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    // Goes through ever layer to calculate evaluations for the entire network
-    public Vector2 ProccessingEvaluations(float[] inputs)
-    {
         // Send inputs to first layer
         // send the raycast distance in the neural network by first
         // Give the first input nodes their dist evaluation.
@@ -116,7 +123,7 @@ public class NeuralNetwork : MonoBehaviour
             {
                 for (int j = 0; j < 5; j++)
                 {
-                    layers[k].neurons[i].incomingWeights.Add(/*Random.Range(0f, 1f)*/ .5f);
+                    layers[k].neurons[i].incomingWeights.Add(Random.Range(0f, 1f));
                 }
             }
         }
@@ -134,6 +141,7 @@ public class NeuralNetwork : MonoBehaviour
 
 public class Layer
 {
+    public float debug = 1;
     public List<Neuron> neurons = new List<Neuron>();
 }
 

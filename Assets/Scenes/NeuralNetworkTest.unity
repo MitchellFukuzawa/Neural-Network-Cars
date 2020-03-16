@@ -228,6 +228,7 @@ GameObject:
   - component: {fileID: 132655048}
   - component: {fileID: 132655047}
   - component: {fileID: 132655046}
+  - component: {fileID: 132655052}
   m_Layer: 8
   m_Name: CAR
   m_TagString: Untagged
@@ -269,6 +270,7 @@ MonoBehaviour:
   rayRightFront: {fileID: 617294997}
   rayRight: {fileID: 905519399}
   managerRef: {fileID: 536331079}
+  NN: {fileID: 0}
 --- !u!65 &132655048
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -349,6 +351,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 88.4, z: 0}
+--- !u!114 &132655052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 132655045}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5fbb24e0649b3e4180096cc7300c919, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &151109316
 GameObject:
   m_ObjectHideFlags: 0
@@ -711,7 +725,6 @@ GameObject:
   m_Component:
   - component: {fileID: 536331080}
   - component: {fileID: 536331081}
-  - component: {fileID: 536331082}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -750,18 +763,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: efb75b488546acd46b8e9185009e9762, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &536331082
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 536331079}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c5fbb24e0649b3e4180096cc7300c919, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &582462533

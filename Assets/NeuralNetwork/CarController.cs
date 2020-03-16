@@ -13,6 +13,10 @@ public class CarController : MonoBehaviour
     public Transform rayRight;
     public GameObject managerRef;
 
+    public float vertMove;
+    public float horizontalMove;
+
+    public NeuralNetwork NN;
 
     private const float Acceleration = 80f;
     private const float TurnRate = 100;
@@ -26,24 +30,33 @@ public class CarController : MonoBehaviour
         carRigidbody = GetComponent<Rigidbody>();
         checkpoints = managerRef.GetComponentsInChildren<Checkpoints>();
         CalculateCheckpointPercentages();
+        NN = new NeuralNetwork();
     }
 
     // Update is called once per frame
     void Update()
     {
-        CreateRayCast(rayLeft, 10, -transform.right);
-        CreateRayCast(rayLeftFront, 10, -transform.right + transform.forward);
-        CreateRayCast(rayLeft, 10, transform.forward);
-        CreateRayCast(rayLeft, 10, transform.right + transform.forward);
-        CreateRayCast(rayLeft, 10, transform.right);
-
-
         float WeightVerticle = 0;
         float WeightHorizontal = 0;
+        
+
+        float[] raycastDistances = new float[5];
+        
+        raycastDistances[0] = CreateRayCast(rayLeft, 10, -transform.right);
+        raycastDistances[1] = CreateRayCast(rayLeftFront, 10, -transform.right + transform.forward);
+        raycastDistances[2] = CreateRayCast(rayLeft, 10, transform.forward);
+        raycastDistances[3] = CreateRayCast(rayLeft, 10, transform.right + transform.forward);
+        raycastDistances[4] = CreateRayCast(rayLeft, 10, transform.right);
+
+
+        Vector2 AI_Movement = NN.ProccessingEvaluations(raycastDistances);
+        WeightVerticle = AI_Movement.x;
+        WeightHorizontal = AI_Movement.y;
+        //vertMove =
 
         // User input
-        WeightVerticle = Input.GetAxis("Vertical");
-        WeightHorizontal = Input.GetAxis("Horizontal");
+        //WeightVerticle = Input.GetAxis("Vertical");
+        //WeightHorizontal = Input.GetAxis("Horizontal");
 
         // Clamp User Input weights
         Mathf.Clamp(WeightVerticle, -1, 1);
