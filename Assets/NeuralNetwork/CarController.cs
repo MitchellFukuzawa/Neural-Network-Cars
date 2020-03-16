@@ -42,17 +42,17 @@ public class CarController : MonoBehaviour
 
         float[] raycastDistances = new float[5];
         
-        raycastDistances[0] = CreateRayCast(rayLeft, 10, -transform.right);
-        raycastDistances[1] = CreateRayCast(rayLeftFront, 10, -transform.right + transform.forward);
-        raycastDistances[2] = CreateRayCast(rayLeft, 10, transform.forward);
-        raycastDistances[3] = CreateRayCast(rayLeft, 10, transform.right + transform.forward);
-        raycastDistances[4] = CreateRayCast(rayLeft, 10, transform.right);
+        raycastDistances[0] = CreateRayCast(rayLeft, 100, -transform.right);
+        raycastDistances[1] = CreateRayCast(rayLeftFront, 100, -transform.right + transform.forward);
+        raycastDistances[2] = CreateRayCast(rayLeft, 100, transform.forward);
+        raycastDistances[3] = CreateRayCast(rayLeft, 100, transform.right + transform.forward);
+        raycastDistances[4] = CreateRayCast(rayLeft, 100, transform.right);
 
 
         Vector2 AI_Movement = NN.ProccessingEvaluations(raycastDistances);
         WeightVerticle = AI_Movement.x;
         WeightHorizontal = (AI_Movement.y - .5f) * 2f;
-        print("HoreMove: " + WeightHorizontal);
+        //print("HoreMove: " + WeightHorizontal);
         //vertMove =
 
         // User input

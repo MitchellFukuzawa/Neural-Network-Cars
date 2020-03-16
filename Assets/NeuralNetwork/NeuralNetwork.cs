@@ -6,6 +6,12 @@ public class NeuralNetwork : MonoBehaviour
 {
     public List<Layer> layers = new List<Layer>();
 
+    public NeuralNetwork()
+    {
+        initializeLayers();
+        SetRandomWeights();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -35,27 +41,7 @@ public class NeuralNetwork : MonoBehaviour
     // Goes through ever layer to calculate evaluations for the entire network
     public Vector2 ProccessingEvaluations(float[] inputs)
     {
-        layers = new List<Layer>();
-
-        // Creates 4 layers in the neural network
-        for (int i = 0; i < 4; i++)
-        {
-            layers.Add(new Layer());
-        }
-
-        // Fill each layer with 5-4-3-2 neuron topology
-        foreach (var layer in layers)
-        {
-            for (int i = 0; i < 4; i++)
-            {
-                for (int j = 0; j < 5 - i; j++)
-                {
-                    layer.neurons.Add(new Neuron());
-                }
-            }
-        }
-
-        SetRandomWeights();
+        
 
 
         // Send inputs to first layer
@@ -124,6 +110,27 @@ public class NeuralNetwork : MonoBehaviour
                 for (int j = 0; j < 5; j++)
                 {
                     layers[k].neurons[i].incomingWeights.Add(Random.Range(-1f, 1f));
+                }
+            }
+        }
+    }
+
+    public void initializeLayers()
+    {
+        // Creates 4 layers in the neural network
+        for (int i = 0; i < 4; i++)
+        {
+            layers.Add(new Layer());
+        }
+
+        // Fill each layer with 5-4-3-2 neuron topology
+        foreach (var layer in layers)
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                for (int j = 0; j < 5 - i; j++)
+                {
+                    layer.neurons.Add(new Neuron());
                 }
             }
         }
