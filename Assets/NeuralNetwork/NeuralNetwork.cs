@@ -6,7 +6,7 @@ public class NeuralNetwork : MonoBehaviour
 {
     public List<Layer> layers;
     [SerializeField]
-    private int[] topology = new int[] { 5, 4, 3, 2 };
+    public int[] topology = new int[] { 5, 4, 3, 2 };
     public Manager manager;
     public CarController carController;
 
@@ -22,7 +22,7 @@ public class NeuralNetwork : MonoBehaviour
         initializeLayers();
 
         // Set random weights for only the first generation
-        if(manager.Generation == 1)
+        if(manager.saveData.generation == 1)
         {
             SetRandomWeights();
             print("SetRandomWeights");
@@ -112,7 +112,10 @@ public class NeuralNetwork : MonoBehaviour
 
             for (int j = 0; j < topology[0]; j++)
             {
+                //print("weights: " + layers[1].neurons[i].incomingWeights.Count);
+
                 //             (Preivous layers' evals)         (get current layers incoming weights)
+                print("NN_Weigts: " + layers[1].neurons[i].incomingWeights.Count);
                 summation += layers[0].neurons[j].Evaluation * layers[1].neurons[i].incomingWeights[j];
             }
 
@@ -171,7 +174,7 @@ public class NeuralNetwork : MonoBehaviour
                 // init incoming weights
                 for (int j = 0; j < topology[k-1]; j++)
                 {
-                    layers[k].neurons[i].incomingWeights.Add(Random.Range(-1,1));
+                    layers[k].neurons[i].incomingWeights.Add(Random.Range(-1f,1f));
                 }
             }
 
@@ -188,7 +191,7 @@ public class NeuralNetwork : MonoBehaviour
             layers.Add(new Layer());
         }
 
-        // Fill each layer with 5-3-2 neuron topology
+        // Fill each layer with 5-4-3-2 neuron topology
 
         for (int i = 0; i < topology.Length; i++)
         {
@@ -196,6 +199,15 @@ public class NeuralNetwork : MonoBehaviour
             {
 
                 layers[i].neurons.Add(new Neuron());
+            }
+        }
+
+        //for each layer except the input layer
+        for (int i = 1; i < 4; i++)
+        {
+            for (int j = 0; j < layers[i].neurons.Count; j++)
+            {
+                layers[i].neurons[j].incomingWeights = new List<float>();
             }
         }
     }
