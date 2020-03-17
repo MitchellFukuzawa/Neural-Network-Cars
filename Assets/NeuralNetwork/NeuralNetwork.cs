@@ -6,7 +6,7 @@ public class NeuralNetwork : MonoBehaviour
 {
     public List<Layer> layers;
     [SerializeField]
-    private int[] topology = new int[] { 5, 3, 2 };
+    private int[] topology = new int[] { 5, 4, 3, 2 };
 
     public void Start()
     {
@@ -24,20 +24,6 @@ public class NeuralNetwork : MonoBehaviour
         }
 
         // Hidden layer 1: calculate evaluation for each neuron
-        //for (int i = 0; i < 4; i++) // For all neurons in layers[1] to calculate each neuron evaluation
-        //{
-        //    float summation = 0;
-
-        //    for (int j = 0; j < 5; j++) // For all incoming inputEvaluation * the neurons incoming weights are
-        //    {
-        //        summation += layers[0].neurons[j].Evaluation * layers[1].neurons[i].incomingWeights[j]; 
-        //    }
-
-        //    // set the summation of our neuron to the final summation value
-        //    layers[1].neurons[i].Evaluation = Activation(summation);
-        //}
-
-        // Hidden layer 2: calculate evaluation for each neuron
         for (int i = 0; i < topology[1]; i++)
         {
             float summation = 0;
@@ -47,31 +33,46 @@ public class NeuralNetwork : MonoBehaviour
                 //             (Preivous layers' evals)         (get current layers incoming weights)
                 summation += layers[0].neurons[j].Evaluation * layers[1].neurons[i].incomingWeights[j];
             }
-            
+
 
             layers[1].neurons[i].Evaluation = Activation(summation) - .5f;
         }
 
-        // OUTPUT layer: calculate evaluation for each neuron
+        // Hidden layer 2: calculate evaluation for each neuron
         for (int i = 0; i < topology[2]; i++)
         {
             float summation = 0;
 
             for (int j = 0; j < topology[1]; j++)
             {
-                //print("SizeofLayer 2: " + layers[2].neurons.Count);
-                //print("SizeofLayer 3: " + layers[3].neurons[i].incomingWeights.Count);
-                
                 //             (Preivous layers' evals)         (get current layers incoming weights)
                 summation += layers[1].neurons[j].Evaluation * layers[2].neurons[i].incomingWeights[j];
             }
-            //print("Sum :" + Activation(summation));
+            
 
             layers[2].neurons[i].Evaluation = Activation(summation) - .5f;
         }
 
+        // OUTPUT layer: calculate evaluation for each neuron
+        for (int i = 0; i < topology[3]; i++)
+        {
+            float summation = 0;
+
+            for (int j = 0; j < topology[2]; j++)
+            {
+                //print("SizeofLayer 2: " + layers[2].neurons.Count);
+                //print("SizeofLayer 3: " + layers[3].neurons[i].incomingWeights.Count);
+                
+                //             (Preivous layers' evals)         (get current layers incoming weights)
+                summation += layers[2].neurons[j].Evaluation * layers[3].neurons[i].incomingWeights[j];
+            }
+            //print("Sum :" + Activation(summation));
+
+            layers[3].neurons[i].Evaluation = Activation(summation) - .5f;
+        }
+
         
-        return new Vector2(layers[2].neurons[0].Evaluation, layers[2].neurons[1].Evaluation);
+        return new Vector2(layers[3].neurons[0].Evaluation, layers[3].neurons[1].Evaluation);
     }
 
     // Loops through entire network to set IncomingWeights
