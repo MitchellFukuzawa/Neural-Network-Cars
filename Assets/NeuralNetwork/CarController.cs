@@ -25,9 +25,10 @@ public class CarController : MonoBehaviour
     private float TrackLength;
     private float carSpeed;
     public bool isCarDead = false;
+    public bool UseUserInput = false;
 
     // Add the cars speed into this list to then be averaged when it dies
-    private List<float> SpeedDuringSimulation;
+    public List<float> SpeedDuringSimulation;
 
     // Parts of the fitness evaluation
     private float Percentage = 0;
@@ -68,7 +69,7 @@ public class CarController : MonoBehaviour
 
         // Get the AI values
         Vector2 AI_Movement = NN.ProccessingEvaluations(raycastDistances);
-        WeightVerticle = AI_Movement.x;
+        WeightVerticle = AI_Movement.x + .5f;
         WeightHorizontal = (AI_Movement.y);
         #region Input
         // USER input
@@ -93,16 +94,17 @@ public class CarController : MonoBehaviour
 
             t_TimeAlive += Time.deltaTime;
 
+
             // Do some checks to see if the car is sitting in place
-            if (Mathf.Abs(WeightVerticle) < .1f && t_TimeAlive > 7f)
+            if (Mathf.Abs(WeightVerticle) < .1f && t_TimeAlive > 7f && SpeedDuringSimulation.Count >= 2)
                 isCarDead = true;
 
             // check 
-            if (t_TimeAlive > 7f && Percentage < .35f)
+            if (t_TimeAlive > 7f && Percentage < .1f && SpeedDuringSimulation.Count >= 2)
                 isCarDead = true;
 
             // Edge case to kill everything after 30 seconds
-            if (t_TimeAlive > 30f)
+            if (t_TimeAlive > 60f && SpeedDuringSimulation.Count >= 2)
                 isCarDead = true;
 
         }
@@ -141,7 +143,7 @@ public class CarController : MonoBehaviour
     }
 
     // Call this when the car dies using the list of accumulated speeds
-    private float CalculateAvgSpeed(List<float> speeds)
+    public float CalculateAvgSpeed(List<float> speeds)
     {
         float sum = 0;
         float avg = 0;
@@ -153,8 +155,7 @@ public class CarController : MonoBehaviour
 
         // Make sure we arent div by 0
         if (sum != 0)
-            avg = sum / speeds.Count > 0 ? speeds.Count : 1;
-
+            avg = sum / speeds.Count > 1 ? speeds.Count : .1f;
         return avg;
     }
 

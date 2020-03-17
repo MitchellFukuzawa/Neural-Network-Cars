@@ -7,9 +7,12 @@ public class SaveData : ScriptableObject
 {
     // want to save between generations the top 6 cars
     // This list will have each cars neural network
-    public GameObject[] Top6Cars;
+    //public GameObject[] Top6Cars;
 
-    public int previousGeneration;
+    // [top car number, N number of weights it has]
+    public float[,] weights = new float[6,38];
+
+    public int generation = 0;
 
     public GameObject finalCar;
 }

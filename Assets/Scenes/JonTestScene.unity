@@ -703,7 +703,7 @@ MonoBehaviour:
   carPool: 30
   car: {fileID: 6029992212318909371, guid: e9ad8f44c43f3cf4ca83519b687bcbe2, type: 3}
   Generation: 1
-  saveData: {fileID: 0}
+  saveData: {fileID: 11400000, guid: 0bdcc9176aac5fd448688964a416863d, type: 2}
   CarRankings: []
   BestCars: []
 --- !u!1 &582462533
@@ -978,13 +978,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 777479368}
-  m_LocalRotation: {x: -0, y: 0.70710677, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 124.86998, y: -173.63535, z: 5.3007812}
-  m_LocalScale: {x: 74, y: 20.87, z: 1}
+  m_LocalRotation: {x: 0.000000025281976, y: -0.49675906, z: -2.6458125e-10, w: -0.86788857}
+  m_LocalPosition: {x: 104.5, y: -173.64, z: 8.6}
+  m_LocalScale: {x: 85.1, y: 20.87, z: 3.66}
   m_Children: []
   m_Father: {fileID: 151109317}
   m_RootOrder: 6
-  m_LocalEulerAnglesHint: {x: 0, y: 90.00001, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 59.572002, z: 0}
 --- !u!1 &830525852
 GameObject:
   m_ObjectHideFlags: 0
@@ -1012,7 +1012,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 830525852}
   m_LocalRotation: {x: -0, y: 0.70710677, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -16.6, y: -173.63535, z: -63.4}
+  m_LocalPosition: {x: 10.3, y: -173.63535, z: -63.4}
   m_LocalScale: {x: 74, y: 20.87, z: 1}
   m_Children: []
   m_Father: {fileID: 151109317}

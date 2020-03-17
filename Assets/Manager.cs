@@ -33,12 +33,13 @@ public class Manager : MonoBehaviour
 
     private void Start()
     {
+        saveData.generation++;
         CarsInSimulation = new GameObject[carPool];
-        if (Generation == 1)
+
+        if (saveData.generation == 1)
         {
             // Clean up previous data
-            saveData.previousGeneration = 1;
-            saveData.Top6Cars = new GameObject[6];
+            //saveData.Top6Cars = new GameObject[6];
 
 
             for (int i = 0; i < carPool; i++)
@@ -53,22 +54,72 @@ public class Manager : MonoBehaviour
         // Now that the generation has gotten the first results
         // we want to spawn in the top 6
         // and spawn in 24 new cars that are genetically modified
-        if(Generation > 1)
+        if(saveData.generation > 1)
         {
             // Spawn in top 6 cars
-            for (int i = 0; i < 6; i++)
-            {
-                GameObject inst = Instantiate(saveData.Top6Cars[i]);
-                CarsInSimulation[i] = inst;
-            }
+            //for (int i = 0; i < 6; i++)
 
-            for (int i = 0; i < 24; i++)
+            //print("Debug_TopCars: " + saveData.Top6Cars.Length);
+
+            // For all top 6 spawned in cars
+            for (int c = 0; c < 6; c++)
             {
-                // Create 24 new cars based off of weights of the top 2 cars
                 GameObject inst = Instantiate(car);
+                CarsInSimulation[c] = inst;
 
-                // loop through each layer, each neuron and each weight
-                inst.GetComponent<NeuralNetwork>().CreateNewCar(saveData.Top6Cars[0].GetComponent<NeuralNetwork>(), saveData.Top6Cars[1].GetComponent<NeuralNetwork>(), inst.GetComponent<NeuralNetwork>());
+                inst.GetComponent<NeuralNetwork>().initializeLayers();
+                // for all layers
+                for (int n = 0; n < CarsInSimulation[c].GetComponent<NeuralNetwork>().layers.Count; n++)
+                {
+                    // for all neurons
+                    for (int j = 0; j < CarsInSimulation[c].GetComponent<NeuralNetwork>().layers[n].neurons.Count; j++)
+                    {
+                        // for all weights
+                        for (int k = 0; k < CarsInSimulation[c].GetComponent<NeuralNetwork>().layers[n].neurons[j].incomingWeights.Count; k++)
+                        {
+                            // Send the data into the scriptable object array
+                            //saveData.weights[i, k] = CarsInSimulation[c].GetComponent<NeuralNetwork>().layers[n].neurons[j].incomingWeights[k];
+
+                            inst.GetComponent<NeuralNetwork>().layers[n].neurons[j].incomingWeights[k] = saveData.weights[c, k + j + n];
+                        }
+                    }
+                }
+            }
+            
+
+            //for (int i = 0; i < 24; i++)
+            //{
+            //    // Create 24 new cars based off of weights of the top 2 cars
+            //    GameObject inst = Instantiate(CarsInSimulation[0]); // spawn best car
+
+            //    // loop through each layer, each neuron and each weight
+                
+            //}
+
+            for (int c = 6; c < 30; c++)
+            {
+                GameObject inst = Instantiate(car);
+                CarsInSimulation[c] = inst;
+
+                inst.GetComponent<NeuralNetwork>().initializeLayers();
+                // for all layers
+                for (int n = 0; n < CarsInSimulation[c].GetComponent<NeuralNetwork>().layers.Count; n++)
+                {
+                    // for all neurons
+                    for (int j = 0; j < CarsInSimulation[c].GetComponent<NeuralNetwork>().layers[n].neurons.Count; j++)
+                    {
+                        // for all weights
+                        for (int k = 0; k < CarsInSimulation[c].GetComponent<NeuralNetwork>().layers[n].neurons[j].incomingWeights.Count; k++)
+                        {
+                            // Send the data into the scriptable object array
+                            //saveData.weights[i, k] = CarsInSimulation[c].GetComponent<NeuralNetwork>().layers[n].neurons[j].incomingWeights[k];
+
+                            inst.GetComponent<NeuralNetwork>().layers[n].neurons[j].incomingWeights[k] = saveData.weights[c, k + j + n];
+                        }
+                    }
+                }
+
+                inst.GetComponent<NeuralNetwork>().CreateNewCar(CarsInSimulation[0].GetComponent<NeuralNetwork>(), CarsInSimulation[1].GetComponent<NeuralNetwork>(), inst.GetComponent<NeuralNetwork>());
             }
         }
     }
@@ -83,11 +134,6 @@ public class Manager : MonoBehaviour
             bubbleSort(CarsInSimulation);
 
             // take the best 6 cars and store them in the saveData
-            for (int i = 0; i < 6; i++)
-            {
-                saveData.Top6Cars[i] = CarsInSimulation[i];
-            }
-
             NextGeneration();
         }
 
@@ -129,9 +175,35 @@ public class Manager : MonoBehaviour
 
     private void NextGeneration()
     {
-        saveData.previousGeneration++;
+        // Saves the weights of all top 6 cars in saveData.weights[,]
+        // For top 6 cars
+        for (int i = 0; i < 6; i++)
+        {
+            // for all layers
+            for (int n = 0; n < CarsInSimulation[i].GetComponent<NeuralNetwork>().layers.Count; n++)
+            {
+                // for all neurons
+                for (int j = 0; j < CarsInSimulation[i].GetComponent<NeuralNetwork>().layers[n].neurons.Count; j++)
+                {
+                    // for all weights
+                    for (int k = 0; k < CarsInSimulation[i].GetComponent<NeuralNetwork>().layers[n].neurons[j].incomingWeights.Count; k++)
+                    {
+                        // Send the data into the scriptable object array
+                        saveData.weights[i,k] = CarsInSimulation[i].GetComponent<NeuralNetwork>().layers[n].neurons[j].incomingWeights[k];
+
+                    }
+                }
+            }
+        }
+        print("Best Fitness for gen: " + saveData.generation + "     Fitness: " + CarsInSimulation[0].GetComponent<NeuralNetwork>().fitness);
+        print("Best Avg Speed: " + CarsInSimulation[0].GetComponent<CarController>().CalculateAvgSpeed(CarsInSimulation[0].GetComponent<CarController>().SpeedDuringSimulation));
         SceneManager.LoadScene(0);
     }
 
-
+    private void OnApplicationQuit()
+    {
+        print("gen: " + saveData.generation);
+        saveData.generation = 0;
+        saveData.weights = new float[6,38];
+    }
 }

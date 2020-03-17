@@ -38,7 +38,8 @@ public class NeuralNetwork : MonoBehaviour
 
     public NeuralNetwork CreateNewCar(NeuralNetwork a, NeuralNetwork b, NeuralNetwork baby)
     {
-        
+        //baby.manager = FindObjectOfType<Manager>();
+        //baby.initializeLayers();
         for (int i = 0; i < a.layers.Count; i++)
         {
             for (int j = 0; j  < a.layers[i].neurons.Count; j ++)
@@ -64,6 +65,32 @@ public class NeuralNetwork : MonoBehaviour
                 }
             }
         }
+        return baby;
+    }
+
+    public float[,] GeneticCrossoverMutation(float[,] a, float[,] b, int carNumber)
+    {
+        float[,] baby = new float[6,38];
+
+        for (int i = 0; i < baby.GetLength(1); i++)
+        {
+            int randInt = Random.Range(0, 2);
+
+            // Inherit parents weights
+            if (randInt > 0)
+                baby[carNumber, i] = a[carNumber, i];
+            else
+                baby[carNumber, i] = b[carNumber, i];
+
+            // Mutation chance per weight
+            float randFloat = Random.value;
+
+            // 20% chance to mutate the parent weight
+            if (randFloat <= .2f)
+            {
+                baby[carNumber, i] += 1f;
+            }
+        }
 
         return baby;
     }
@@ -74,6 +101,7 @@ public class NeuralNetwork : MonoBehaviour
         // Input layer
         for (int i = 0; i < topology[0]; i++)
         {
+
             layers[0].neurons[i].Evaluation = inputs[i];
         }
 
