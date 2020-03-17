@@ -104,7 +104,7 @@ public class CarController : MonoBehaviour
             // Edge case to kill everything after 30 seconds
             if (t_TimeAlive > 30f)
                 isCarDead = true;
-            print("Time: " + t_TimeAlive);
+
         }
         else
         {

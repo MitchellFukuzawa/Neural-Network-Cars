@@ -16,6 +16,7 @@ public class Manager : MonoBehaviour
     public GameObject car;
 
     public int Generation = 1;
+    public SaveData saveData;
 
     // List used once the generation has completed to rank
     // cars based on their fitness rating
@@ -33,15 +34,42 @@ public class Manager : MonoBehaviour
     private void Start()
     {
         CarsInSimulation = new GameObject[carPool];
-        
-
-        for (int i = 0; i < carPool; i++)
+        if (Generation == 1)
         {
-            GameObject inst = Instantiate(car);
-            inst.transform.position = checkpoints[0].transform.position;
+            // Clean up previous data
+            saveData.previousGeneration = 1;
+            saveData.Top6Cars = new GameObject[6];
 
-            // Add the car to a list to keep track of all cars
-            CarsInSimulation[i] = inst;
+
+            for (int i = 0; i < carPool; i++)
+            {
+                GameObject inst = Instantiate(car);
+                inst.transform.position = checkpoints[0].transform.position;
+
+                // Add the car to a list to keep track of all cars
+                CarsInSimulation[i] = inst;
+            }
+        }
+        // Now that the generation has gotten the first results
+        // we want to spawn in the top 6
+        // and spawn in 24 new cars that are genetically modified
+        if(Generation > 1)
+        {
+            // Spawn in top 6 cars
+            for (int i = 0; i < 6; i++)
+            {
+                GameObject inst = Instantiate(saveData.Top6Cars[i]);
+                CarsInSimulation[i] = inst;
+            }
+
+            for (int i = 0; i < 24; i++)
+            {
+                // Create 24 new cars based off of weights of the top 2 cars
+                GameObject inst = Instantiate(car);
+
+                // loop through each layer, each neuron and each weight
+                inst.GetComponent<NeuralNetwork>().CreateNewCar(saveData.Top6Cars[0].GetComponent<NeuralNetwork>(), saveData.Top6Cars[1].GetComponent<NeuralNetwork>(), inst.GetComponent<NeuralNetwork>());
+            }
         }
     }
 
@@ -54,10 +82,13 @@ public class Manager : MonoBehaviour
             // Sorts the array high to lowest
             bubbleSort(CarsInSimulation);
 
-            for (int i = 0; i < CarsInSimulation.Length; i++)
+            // take the best 6 cars and store them in the saveData
+            for (int i = 0; i < 6; i++)
             {
-
+                saveData.Top6Cars[i] = CarsInSimulation[i];
             }
+
+            NextGeneration();
         }
 
     }
@@ -98,6 +129,7 @@ public class Manager : MonoBehaviour
 
     private void NextGeneration()
     {
+        saveData.previousGeneration++;
         SceneManager.LoadScene(0);
     }
 

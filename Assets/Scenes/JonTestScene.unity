@@ -700,9 +700,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CarsInSimulation: []
-  carPool: 3
+  carPool: 30
   car: {fileID: 6029992212318909371, guid: e9ad8f44c43f3cf4ca83519b687bcbe2, type: 3}
   Generation: 1
+  saveData: {fileID: 0}
   CarRankings: []
   BestCars: []
 --- !u!1 &582462533

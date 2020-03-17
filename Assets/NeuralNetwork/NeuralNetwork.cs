@@ -36,6 +36,38 @@ public class NeuralNetwork : MonoBehaviour
         }
     }
 
+    public NeuralNetwork CreateNewCar(NeuralNetwork a, NeuralNetwork b, NeuralNetwork baby)
+    {
+        
+        for (int i = 0; i < a.layers.Count; i++)
+        {
+            for (int j = 0; j  < a.layers[i].neurons.Count; j ++)
+            {
+                for (int k = 0; k < a.layers[i].neurons[j].incomingWeights.Count; k++)
+                {
+                    int randInt = Random.Range(0, 2);
+
+                    // Inherit parents weights
+                    if (randInt > 0)
+                        baby.layers[i].neurons[j].incomingWeights[k] = a.layers[i].neurons[j].incomingWeights[k]; // A parent
+                    else
+                        baby.layers[i].neurons[j].incomingWeights[k] = b.layers[i].neurons[j].incomingWeights[k]; // B parent
+
+                    // Mutation chance per weight
+                    float randFloat = Random.value;
+
+                    // 20% chance to mutate the parent weight
+                    if(randFloat <= .2f)
+                    {
+                        baby.layers[i].neurons[j].incomingWeights[k] += 1f;
+                    }
+                }
+            }
+        }
+
+        return baby;
+    }
+
     // Goes through ever layer to calculate evaluations for the entire network
     public Vector2 ProccessingEvaluations(float[] inputs)
     {

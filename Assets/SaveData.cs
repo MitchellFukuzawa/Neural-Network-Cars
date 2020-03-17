@@ -2,17 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SaveData : MonoBehaviour
+[CreateAssetMenu(fileName = "SaveData", menuName = "ScriptableObjects/SaveData", order = 1)]
+public class SaveData : ScriptableObject
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    // want to save between generations the top 6 cars
+    // This list will have each cars neural network
+    public GameObject[] Top6Cars;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public int previousGeneration;
+
+    public GameObject finalCar;
 }
