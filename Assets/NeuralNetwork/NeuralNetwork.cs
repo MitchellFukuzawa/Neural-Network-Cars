@@ -7,11 +7,30 @@ public class NeuralNetwork : MonoBehaviour
     public List<Layer> layers;
     [SerializeField]
     private int[] topology = new int[] { 5, 4, 3, 2 };
+    public Manager manager;
+    public CarController carController;
+
+    //[HideInInspector]
+    public float fitness = 0;
+
 
     public void Start()
     {
+        manager = FindObjectOfType<Manager>();
+        carController = GetComponent<CarController>();
+
         initializeLayers();
-        SetRandomWeights();
+
+        // Set random weights for only the first generation
+        if(manager.Generation == 1)
+            SetRandomWeights();
+
+        // Want to check if the generation is past the first
+        // so we can set up a evolution from previous gens weights
+        if(manager.Generation > 1)
+        {
+
+        }
     }
 
     // Goes through ever layer to calculate evaluations for the entire network

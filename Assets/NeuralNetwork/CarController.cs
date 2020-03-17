@@ -23,9 +23,15 @@ public class CarController : MonoBehaviour
     private int currentCheckpoint = 0;
     private Checkpoints[] checkpoints;
     private float TrackLength;
+    private float carSpeed;
+    private bool isCarDead = false;
+
+    // Add the cars speed into this list to then be averaged when it dies
+    private List<float> SpeedDuringSimulation;
+
+    // Parts of the fitness evaluation
     private float Percentage = 0;
-    //private float WeightVerticle = 0;
-    //private float WeightHorizontal = 0;
+    private float AverageSpeed = 0;
 
     private void Start()
     {
@@ -34,6 +40,7 @@ public class CarController : MonoBehaviour
         checkpoints = managerRef.GetComponentsInChildren<Checkpoints>();
         CalculateCheckpointPercentages();
         NN = GetComponent<NeuralNetwork>();
+        SpeedDuringSimulation = new List<float>();
     }
 
     // Update is called once per frame
@@ -53,31 +60,37 @@ public class CarController : MonoBehaviour
 
         raycastDistances[0] *= -1;
         raycastDistances[1] *= -1;
-        //raycastDistances[2] = 100;
-        //raycastDistances[3] = 100;
 
 
-
+        // Get the AI values
         Vector2 AI_Movement = NN.ProccessingEvaluations(raycastDistances);
         WeightVerticle = AI_Movement.x;
         WeightHorizontal = (AI_Movement.y);
-        //print("Horizontal: " + WeightHorizontal);
-        //print("HoreMove: " + WeightHorizontal);
-        //vertMove =
-
-        // User input
+        #region Input
+        // USER input
         //WeightVerticle = Input.GetAxis("Vertical");
         //WeightHorizontal = Input.GetAxis("Horizontal");
-        //print("Vertical: " + WeightHorizontal);
 
         // Clamp User Input weights
-        Mathf.Clamp(WeightVerticle, -1, 1);
-        Mathf.Clamp(WeightHorizontal, -1, 1);
+        WeightVerticle = Mathf.Clamp(WeightVerticle, -1, 1);
+        WeightHorizontal = Mathf.Clamp(WeightHorizontal, -1, 1);
+
+        //Document Speed for avg speed calc
+        carSpeed = WeightVerticle;
 
         // Move forward
-        carRigidbody.velocity = WeightVerticle * transform.forward * Acceleration;
-        carRigidbody.transform.Rotate(Vector3.up * WeightHorizontal * TurnRate * Time.deltaTime);
-        
+        if (!isCarDead)
+        {
+            carRigidbody.velocity = WeightVerticle * transform.forward * Acceleration;
+            carRigidbody.transform.Rotate(Vector3.up * WeightHorizontal * TurnRate * Time.deltaTime);
+
+            // Average speed list
+            CollectSpeedData(0.25f, SpeedDuringSimulation);
+        }
+        #endregion
+
+
+
         // Percentage Calculation
         Percentage = Vector2.Distance(checkpoints[currentCheckpoint - 1].transform.position, transform.position);
         //Debug.Log("Current chekpoint to current position : " + Percentage);
@@ -91,7 +104,40 @@ public class CarController : MonoBehaviour
 
     }
 
+    // Timer used with Colltion of speed data
+    float timeSinceLastSpeedCapture = 0;
+    // Function to record the car speed every capture rate and add into speeds
+    private void CollectSpeedData(float captureRate ,List<float> speeds)
+    {
+        timeSinceLastSpeedCapture += Time.deltaTime;
 
+        if(timeSinceLastSpeedCapture >= captureRate)
+        {
+            speeds.Add(carSpeed);
+            timeSinceLastSpeedCapture = 0;
+        }
+    }
+
+    // Call this when the car dies using the list of accumulated speeds
+    private float CalculateAvgSpeed(List<float> speeds)
+    {
+        float sum = 0;
+        float avg = 0;
+
+        foreach (var speed in speeds)
+        {
+            sum += speed;
+        }
+        avg = sum / speeds.Count;
+
+        return avg;
+    }
+
+    // Calc fitness and set to neural network
+    private void SendFitness()
+    {
+        NN.fitness = CalculateAvgSpeed(SpeedDuringSimulation) * .75f + Percentage * 1f;
+    }
 
     // Raycast for wall detection
     private float CreateRayCast(Transform position, float dist, Vector3 direction)
@@ -121,6 +167,7 @@ public class CarController : MonoBehaviour
         }
     }
 
+    // part of the fitness evaluation
     private void CalculateCheckpointPercentages()
     {
         checkpoints[0].AccumulatedDistance = 0;
@@ -154,7 +201,10 @@ public class CarController : MonoBehaviour
         if (other.gameObject.tag == "Wall")
         {
             //Stop the car
-            print("test");
+            print("Car Died, Speed Collected: " + SpeedDuringSimulation.Count + " Avg Speed: " + CalculateAvgSpeed(SpeedDuringSimulation));
+            isCarDead = true;
+
+            SendFitness();
         }
     }
 }

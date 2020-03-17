@@ -12,6 +12,8 @@ public class Manager : MonoBehaviour
     public int carPool = 10;
     public GameObject car;
 
+    public int Generation = 1;
+
     private void Awake()
     {
         checkpoints = GetComponentsInChildren<Checkpoints>();
