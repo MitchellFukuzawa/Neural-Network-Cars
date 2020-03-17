@@ -23,7 +23,10 @@ public class NeuralNetwork : MonoBehaviour
 
         // Set random weights for only the first generation
         if(manager.Generation == 1)
+        {
             SetRandomWeights();
+            print("SetRandomWeights");
+        }
 
         // Want to check if the generation is past the first
         // so we can set up a evolution from previous gens weights

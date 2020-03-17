@@ -24,7 +24,7 @@ public class CarController : MonoBehaviour
     private Checkpoints[] checkpoints;
     private float TrackLength;
     private float carSpeed;
-    private bool isCarDead = false;
+    public bool isCarDead = false;
 
     // Add the cars speed into this list to then be averaged when it dies
     private List<float> SpeedDuringSimulation;
@@ -32,6 +32,7 @@ public class CarController : MonoBehaviour
     // Parts of the fitness evaluation
     private float Percentage = 0;
     private float AverageSpeed = 0;
+    private float t_TimeAlive = 0;
 
     private void Start()
     {
@@ -41,6 +42,9 @@ public class CarController : MonoBehaviour
         CalculateCheckpointPercentages();
         NN = GetComponent<NeuralNetwork>();
         SpeedDuringSimulation = new List<float>();
+
+        // Speed up simulation
+        Time.timeScale = 1f;
     }
 
     // Update is called once per frame
@@ -86,9 +90,27 @@ public class CarController : MonoBehaviour
 
             // Average speed list
             CollectSpeedData(0.25f, SpeedDuringSimulation);
+
+            t_TimeAlive += Time.deltaTime;
+
+            // Do some checks to see if the car is sitting in place
+            if (Mathf.Abs(WeightVerticle) < .1f && t_TimeAlive > 7f)
+                isCarDead = true;
+
+            // check 
+            if (t_TimeAlive > 7f && Percentage < .35f)
+                isCarDead = true;
+
+            // Edge case to kill everything after 30 seconds
+            if (t_TimeAlive > 30f)
+                isCarDead = true;
+            print("Time: " + t_TimeAlive);
+        }
+        else
+        {
+            carRigidbody.velocity = Vector3.zero;
         }
         #endregion
-
 
 
         // Percentage Calculation
@@ -128,7 +150,10 @@ public class CarController : MonoBehaviour
         {
             sum += speed;
         }
-        avg = sum / speeds.Count;
+
+        // Make sure we arent div by 0
+        if (sum != 0)
+            avg = sum / speeds.Count > 0 ? speeds.Count : 1;
 
         return avg;
     }
@@ -201,7 +226,7 @@ public class CarController : MonoBehaviour
         if (other.gameObject.tag == "Wall")
         {
             //Stop the car
-            print("Car Died, Speed Collected: " + SpeedDuringSimulation.Count + " Avg Speed: " + CalculateAvgSpeed(SpeedDuringSimulation));
+
             isCarDead = true;
 
             SendFitness();
