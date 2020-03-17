@@ -43,13 +43,14 @@ public class CarController : MonoBehaviour
         float WeightHorizontal = 0;
         
 
-        float[] raycastDistances = new float[4];
+        float[] raycastDistances = new float[5];
 
         raycastDistances[0] = CreateRayCast(rayLeft, 100, -transform.right);
         raycastDistances[1] = CreateRayCast(rayLeft, 100, -transform.right + transform.forward);
         raycastDistances[2] = CreateRayCast(rayLeft, 100, transform.right + transform.forward);
         raycastDistances[3] = CreateRayCast(rayLeft, 100, transform.right);
-                                  //raycastDistances[4] = 100;/*CreateRayCast(rayLeft, 100, transform.right);*/
+        raycastDistances[4] = CreateRayCast(rayLeft, 100, transform.forward);
+
         raycastDistances[0] *= -1;
         raycastDistances[1] *= -1;
         //raycastDistances[2] = 100;

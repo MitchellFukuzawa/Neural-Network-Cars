@@ -6,7 +6,7 @@ public class NeuralNetwork : MonoBehaviour
 {
     public List<Layer> layers;
     [SerializeField]
-    private int[] topology = new int[] { 4, 3, 2 };
+    private int[] topology = new int[] { 5, 3, 2 };
 
     public void Start()
     {
@@ -141,6 +141,7 @@ public class Layer
 public class Neuron
 {
     public float Evaluation = 0;
+    public float bias = 0;
 
     // These are the weight going to the neuron
     public List<float> incomingWeights;
