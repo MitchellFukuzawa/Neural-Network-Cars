@@ -24,6 +24,8 @@ public class CarController : MonoBehaviour
     private Checkpoints[] checkpoints;
     private float TrackLength;
     private float Percentage = 0;
+    //private float WeightVerticle = 0;
+    //private float WeightHorizontal = 0;
 
     private void Start()
     {
@@ -45,20 +47,20 @@ public class CarController : MonoBehaviour
 
         raycastDistances[0] = CreateRayCast(rayLeft, 100, -transform.right);
         raycastDistances[1] = CreateRayCast(rayLeft, 100, -transform.right + transform.forward);
-        raycastDistances[2] = CreateRayCast(rayLeft, 100, transform.right);
-        raycastDistances[3] = CreateRayCast(rayLeft, 100, transform.right + transform.forward);
+        raycastDistances[2] = CreateRayCast(rayLeft, 100, transform.right + transform.forward);
+        raycastDistances[3] = CreateRayCast(rayLeft, 100, transform.right);
                                   //raycastDistances[4] = 100;/*CreateRayCast(rayLeft, 100, transform.right);*/
         raycastDistances[0] *= -1;
         raycastDistances[1] *= -1;
-        raycastDistances[2] *= 1;
-        raycastDistances[3] *= 1;
+        //raycastDistances[2] = 100;
+        //raycastDistances[3] = 100;
 
 
 
         Vector2 AI_Movement = NN.ProccessingEvaluations(raycastDistances);
         WeightVerticle = AI_Movement.x;
-        WeightHorizontal = (AI_Movement.y)-.5f;
-        print("Horizontal: " + WeightHorizontal);
+        WeightHorizontal = (AI_Movement.y);
+        //print("Horizontal: " + WeightHorizontal);
         //print("HoreMove: " + WeightHorizontal);
         //vertMove =
 
@@ -144,6 +146,14 @@ public class CarController : MonoBehaviour
                 currentCheckpoint--;
                 //Debug.Log("MINUS");
             }
+        }
+    }
+    private void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.tag == "Wall")
+        {
+            //Stop the car
+            print("test");
         }
     }
 }
