@@ -80,7 +80,10 @@ public class Manager : MonoBehaviour
                 CarsInSimulation[c] = inst;
                 inst.name = "car " + c;
                 inst.GetComponent<NeuralNetwork>().initializeLayers();
+
                 inst.transform.position = checkpoints[0].transform.position;
+                inst.transform.rotation = Quaternion.Euler(checkpoints[0].transform.rotation.eulerAngles);
+
                 int[] mathArray = CarsInSimulation[c].GetComponent<NeuralNetwork>().topology;
                 int numberOfAddedWeights = 0;
 
@@ -109,6 +112,7 @@ public class Manager : MonoBehaviour
                 CarsInSimulation[c] = inst;
                 inst.name = "car " + c;
                 inst.transform.position = checkpoints[0].transform.position;
+                inst.transform.rotation = Quaternion.Euler( checkpoints[0].transform.rotation.eulerAngles);
 
                 inst.GetComponent<NeuralNetwork>().initializeLayers();
                 // for all layers

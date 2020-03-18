@@ -111,8 +111,8 @@ public class CarController : MonoBehaviour
                 isCarDead = true;
 
             // Edge case to kill everything after 30 seconds
-            if (t_TimeAlive > 60f && SpeedDuringSimulation.Count >= 2)
-                isCarDead = true;
+            //if (t_TimeAlive > 60f && SpeedDuringSimulation.Count >= 2)
+            //    isCarDead = true;
 
         }
         else
