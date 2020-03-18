@@ -118,7 +118,7 @@ public class CarController : MonoBehaviour
         // Percentage Calculation
         int temp = currentCheckpoint - 1;
 
-        Debug.Log("Current Checkpoint : " + currentCheckpoint);
+
         Percentage = Vector2.Distance(checkpoints[currentCheckpoint - 1].transform.position, transform.position);
         //Debug.Log("Current chekpoint to current position : " + Percentage);
         if (currentCheckpoint != 1)

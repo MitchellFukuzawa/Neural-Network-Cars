@@ -49,10 +49,6 @@ public class Manager : MonoBehaviour
 
     public void OnSceneLoaded(Scene s, LoadSceneMode l)
     {
-        //saveData.generation++;
-        print("OnEnable");
-        if (saveData.generation == 2)
-            print("");
 
         CarsInSimulation = new GameObject[carPool];
 
@@ -80,7 +76,6 @@ public class Manager : MonoBehaviour
             // Spawn in top 6 cars
             //for (int i = 0; i < 6; i++)
 
-            //print("Debug_TopCars: " + saveData.Top6Cars.Length);
 
             // For all top 6 spawned in cars
             for (int c = 0; c < 6; c++)
@@ -103,18 +98,11 @@ public class Manager : MonoBehaviour
                         for (int k = 0; k < mathArray[n - 1]; k++)
                         {
                             // Send the data into the scriptable object array
-                            //saveData.weights[i, k] = CarsInSimulation[c].GetComponent<NeuralNetwork>().layers[n].neurons[j].incomingWeights[k];
-                            //print("k j n: " + (k + j + n));
-
-
                             inst.GetComponent<NeuralNetwork>().layers[n].neurons[j].incomingWeights.Add(weights[c, numberOfAddedWeights]);
                             numberOfAddedWeights++;
                         }
                     }
                 }
-
-                //print("Num Weights: " + numberOfAddedWeights);
-
             }
 
             for (int c = 6; c < 30; c++)
@@ -128,7 +116,7 @@ public class Manager : MonoBehaviour
                 // for all layers
                 int[] mathArray = CarsInSimulation[c].GetComponent<NeuralNetwork>().topology;
                 int numberOfAddedWeights = 0;
-                //print("C:" + c);
+
                 // for all layers but the input layer
                 for (int n = 1; n < mathArray.Length; n++)
                 {
@@ -139,10 +127,6 @@ public class Manager : MonoBehaviour
                         for (int k = 0; k < mathArray[n - 1]; k++)
                         {
                             // Send the data into the scriptable object array
-                            //saveData.weights[i, k] = CarsInSimulation[c].GetComponent<NeuralNetwork>().layers[n].neurons[j].incomingWeights[k];
-                            //print("k j n: " + (k + j + n));
-
-
                             inst.GetComponent<NeuralNetwork>().layers[n].neurons[j].incomingWeights.Add(weights[0, numberOfAddedWeights]);
                             numberOfAddedWeights++;
                         }
@@ -157,9 +141,6 @@ public class Manager : MonoBehaviour
 
     private void Update()
     {
-        //if (!hasManagerInitialized)
-        //    ManagerStart();
-
         // if the cars in the scene are all dead the simulation is over
         // When the sim is over we want to rank from best at [0] to worst at [29]
         if (CheckIfCarsAreDead())
@@ -180,25 +161,32 @@ public class Manager : MonoBehaviour
             }
         }
 
+        // Saving weights
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            Save_BestFitnessWeights();
+        }
+
+        // Load weights
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            Load_FitnessWeights();
+        }
     }
 
     // Bubble sort for first place cars
-    static void bubbleSort(GameObject[] arr)
+    static void bubbleSort(GameObject[] a)
     {
-
-
-        int n = arr.Length;
+        int n = a.Length;
         for (int i = 0; i < n - 1; i++)
             for (int j = 0; j < n - i - 1; j++)
-                if (arr[j].GetComponent<NeuralNetwork>().fitness < arr[j + 1].GetComponent<NeuralNetwork>().fitness)
+                if (a[j].GetComponent<NeuralNetwork>().fitness < a[j + 1].GetComponent<NeuralNetwork>().fitness)
                 {
                     // swap temp and arr[i] 
-                    GameObject temp = arr[j];
-                    arr[j] = arr[j + 1];
-                    arr[j + 1] = temp;
+                    GameObject temp = a[j];
+                    a[j] = a[j + 1];
+                    a[j + 1] = temp;
                 }
-
-
     }
 
     // returns true if all cars are dead
@@ -235,7 +223,7 @@ public class Manager : MonoBehaviour
                     // for all weights
                     for (int k = 0; k < CarsInSimulation[i].GetComponent<NeuralNetwork>().topology[n - 1]; k++)
                     {
-                        // Send the data into the scriptable object array
+                        // Send the data into the Manager to carry over on restart
                         weights[i, weightCount] = CarsInSimulation[i].GetComponent<NeuralNetwork>().layers[n].neurons[j].incomingWeights[k];
                         weightCount++;
                     }
@@ -250,6 +238,7 @@ public class Manager : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
+    // Clean up
     private void OnApplicationQuit()
     {
         print("-----------------------------------");
@@ -261,12 +250,17 @@ public class Manager : MonoBehaviour
     // When pressed loops through weight[,] storage array
     public void Save_BestFitnessWeights()
     {
+
+
+        print("___________________hi");
         string serializedData = "";
 
         for (int i = 0; i < 38; i++)
         {
+            print("Weight Data 0:" + weights[0, i]);
             serializedData += "Weight " + i + ":" + weights[0, i] + "\n";
         }
+        print("DATA:" + serializedData);
         StreamWriter writer = new StreamWriter("weight.txt", true);
         writer.Write(serializedData);
 
