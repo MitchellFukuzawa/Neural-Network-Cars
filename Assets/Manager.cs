@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System;
+using System.IO;
 
 
 public class Manager : MonoBehaviour
@@ -254,5 +255,40 @@ public class Manager : MonoBehaviour
         print("-----------------------------------");
         saveData.generation = 1;
         weights = new float[6,38];
+    }
+
+    // Connected to a button on the UI
+    // When pressed loops through weight[,] storage array
+    public void Save_BestFitnessWeights()
+    {
+        string serializedData = "";
+
+        for (int i = 0; i < 38; i++)
+        {
+            serializedData += "Weight " + i + ":" + weights[0, i] + "\n";
+        }
+        StreamWriter writer = new StreamWriter("weight.txt", true);
+        writer.Write(serializedData);
+
+    }
+
+    // When loading we read the weights, set and then load next generation
+    public void Load_FitnessWeights()
+    {
+        int i = 0;
+        StreamReader reader = new StreamReader("weight.txt");
+        while (!reader.EndOfStream)
+        {
+            i++;
+            string lineA = reader.ReadLine();
+            string[] splitA = lineA.Split(':');
+            float weightvalue = float.Parse(splitA[1]);
+            print("Line:" + i + "      Weight:" + weightvalue);
+
+            weights[0, i] = weightvalue;
+            weights[1, i] = weightvalue;
+        }
+
+        NextGeneration();
     }
 }
