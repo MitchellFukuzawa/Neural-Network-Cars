@@ -7,7 +7,6 @@ using System;
 
 public class Manager : MonoBehaviour
 {
-    [SerializeField]
     private Checkpoints[] checkpoints;
     private float TrackLength;
     public GameObject[] CarsInSimulation;
