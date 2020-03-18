@@ -11,7 +11,7 @@ public class CarController : MonoBehaviour
     public Transform rayFront;
     public Transform rayRightFront;
     public Transform rayRight;
-    public GameObject managerRef;
+    public Manager manager;
 
     public float vertMove;
     public float horizontalMove;
@@ -38,8 +38,8 @@ public class CarController : MonoBehaviour
     private void Start()
     {
         carRigidbody = GetComponent<Rigidbody>();
-        managerRef = FindObjectOfType<Manager>().gameObject;
-        checkpoints = managerRef.GetComponentsInChildren<Checkpoints>();
+        manager = Manager._instance;
+        checkpoints = manager.GetComponentsInChildren<Checkpoints>();
         CalculateCheckpointPercentages();
         NN = GetComponent<NeuralNetwork>();
         SpeedDuringSimulation = new List<float>();
@@ -69,7 +69,7 @@ public class CarController : MonoBehaviour
 
         // Get the AI values
         Vector2 AI_Movement = NN.ProccessingEvaluations(raycastDistances);
-        WeightVerticle = AI_Movement.x + .5f;
+        WeightVerticle = AI_Movement.x + .2f;
         WeightHorizontal = (AI_Movement.y);
         #region Input
         // USER input
@@ -117,7 +117,7 @@ public class CarController : MonoBehaviour
 
         // Percentage Calculation
         int temp = currentCheckpoint - 1;
-        //print("Checkpoint debug: " + temp);
+
         Percentage = Vector2.Distance(checkpoints[currentCheckpoint - 1].transform.position, transform.position);
         //Debug.Log("Current chekpoint to current position : " + Percentage);
         if (currentCheckpoint != 1)

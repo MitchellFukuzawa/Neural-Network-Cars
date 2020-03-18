@@ -9,9 +9,6 @@ public class SaveData : ScriptableObject
     // This list will have each cars neural network
     //public GameObject[] Top6Cars;
 
-    // [top car number, N number of weights it has]
-    public float[,] weights = new float[6,38];
-
     public int generation = 0;
 
     public GameObject finalCar;

@@ -19,13 +19,14 @@ public class NeuralNetwork : MonoBehaviour
         manager = FindObjectOfType<Manager>();
         carController = GetComponent<CarController>();
 
-        initializeLayers();
+        
 
         // Set random weights for only the first generation
         if(manager.saveData.generation == 1)
         {
+            initializeLayers();
             SetRandomWeights();
-            print("SetRandomWeights");
+
         }
 
         // Want to check if the generation is past the first
@@ -60,7 +61,7 @@ public class NeuralNetwork : MonoBehaviour
                     // 20% chance to mutate the parent weight
                     if(randFloat <= .2f)
                     {
-                        baby.layers[i].neurons[j].incomingWeights[k] += 1f;
+                        baby.layers[i].neurons[j].incomingWeights[k] += .1f;
                     }
                 }
             }
@@ -98,12 +99,16 @@ public class NeuralNetwork : MonoBehaviour
     // Goes through ever layer to calculate evaluations for the entire network
     public Vector2 ProccessingEvaluations(float[] inputs)
     {
+
         // Input layer
         for (int i = 0; i < topology[0]; i++)
         {
 
             layers[0].neurons[i].Evaluation = inputs[i];
         }
+
+        //if(manager.saveData.generation == 2)
+        //    Debug.LogWarning("");
 
         // Hidden layer 1: calculate evaluation for each neuron
         for (int i = 0; i < topology[1]; i++)
@@ -115,7 +120,7 @@ public class NeuralNetwork : MonoBehaviour
                 //print("weights: " + layers[1].neurons[i].incomingWeights.Count);
 
                 //             (Preivous layers' evals)         (get current layers incoming weights)
-                print("NN_Weigts: " + layers[1].neurons[i].incomingWeights.Count);
+
                 summation += layers[0].neurons[j].Evaluation * layers[1].neurons[i].incomingWeights[j];
             }
 
@@ -244,5 +249,6 @@ public class Neuron
     public Neuron()
     {
         incomingWeights = new List<float>();
+
     }
 }
