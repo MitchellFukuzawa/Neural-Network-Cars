@@ -73,10 +73,6 @@ public class Manager : MonoBehaviour
         // and spawn in 24 new cars that are genetically modified
         if(saveData.generation > 1)
         {
-            // Spawn in top 6 cars
-            //for (int i = 0; i < 6; i++)
-
-
             // For all top 6 spawned in cars
             for (int c = 0; c < 6; c++)
             {
@@ -88,6 +84,7 @@ public class Manager : MonoBehaviour
                 int[] mathArray = CarsInSimulation[c].GetComponent<NeuralNetwork>().topology;
                 int numberOfAddedWeights = 0;
 
+                // Setting each top car from previous gen their weights back
                 // for all layers but the input layer
                 for (int n = 1; n < mathArray.Length; n++)
                 {
@@ -105,6 +102,7 @@ public class Manager : MonoBehaviour
                 }
             }
 
+            // Spawn in the rest of the 24 cars and use on them-> Genetic algorithm function "CreateNewCar"
             for (int c = 6; c < 30; c++)
             {
                 GameObject inst = Instantiate(car);
@@ -133,7 +131,9 @@ public class Manager : MonoBehaviour
                     }
                 }
 
-
+                // Uses top 2 car from previous generation to create a baby
+                // randomly picks which weight to use from best and second best parents
+                // then has a chance to mutate
                 inst.GetComponent<NeuralNetwork>().CreateNewCar(CarsInSimulation[0].GetComponent<NeuralNetwork>(), CarsInSimulation[1].GetComponent<NeuralNetwork>(), inst.GetComponent<NeuralNetwork>());
             }
         }

@@ -28,15 +28,11 @@ public class NeuralNetwork : MonoBehaviour
             SetRandomWeights();
 
         }
-
-        // Want to check if the generation is past the first
-        // so we can set up a evolution from previous gens weights
-        if(manager.Generation > 1)
-        {
-
-        }
     }
 
+    // Uses top 2 car from previous generation to create a baby
+    // randomly picks which weight to use from best and second best parents
+    // then has a chance to mutate
     public NeuralNetwork CreateNewCar(NeuralNetwork a, NeuralNetwork b, NeuralNetwork baby)
     {
         //baby.manager = FindObjectOfType<Manager>();
@@ -107,9 +103,6 @@ public class NeuralNetwork : MonoBehaviour
             layers[0].neurons[i].Evaluation = inputs[i];
         }
 
-        //if(manager.saveData.generation == 2)
-        //    Debug.LogWarning("");
-
         // Hidden layer 1: calculate evaluation for each neuron
         for (int i = 0; i < topology[1]; i++)
         {
@@ -150,9 +143,6 @@ public class NeuralNetwork : MonoBehaviour
 
             for (int j = 0; j < topology[2]; j++)
             {
-                //print("SizeofLayer 2: " + layers[2].neurons.Count);
-                //print("SizeofLayer 3: " + layers[3].neurons[i].incomingWeights.Count);
-                
                 //             (Preivous layers' evals)         (get current layers incoming weights)
                 summation += layers[2].neurons[j].Evaluation * layers[3].neurons[i].incomingWeights[j];
             }

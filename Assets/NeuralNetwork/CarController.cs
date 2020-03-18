@@ -68,13 +68,18 @@ public class CarController : MonoBehaviour
 
 
         // Get the AI values
-        Vector2 AI_Movement = NN.ProccessingEvaluations(raycastDistances);
-        WeightVerticle = AI_Movement.x;
-        WeightHorizontal = (AI_Movement.y);
+        if (!UseUserInput)
+        {
+            Vector2 AI_Movement = NN.ProccessingEvaluations(raycastDistances);
+            WeightVerticle = AI_Movement.x;
+            WeightHorizontal = (AI_Movement.y);
+        }
         #region Input
         // USER input
-        //WeightVerticle = Input.GetAxis("Vertical");
-        //WeightHorizontal = Input.GetAxis("Horizontal");
+
+        if(UseUserInput)
+            WeightVerticle = Input.GetAxis("Vertical");
+            WeightHorizontal = Input.GetAxis("Horizontal");
 
         // Clamp User Input weights
         WeightVerticle = Mathf.Clamp(WeightVerticle, -1, 1);
@@ -89,6 +94,8 @@ public class CarController : MonoBehaviour
             carRigidbody.velocity = WeightVerticle * transform.forward * Acceleration;
             carRigidbody.transform.Rotate(Vector3.up * WeightHorizontal * TurnRate * Time.deltaTime);
 
+            if (UseUserInput)
+                return;
             // Average speed list
             CollectSpeedData(0.25f, SpeedDuringSimulation);
 
@@ -230,10 +237,10 @@ public class CarController : MonoBehaviour
         if (other.gameObject.tag == "Wall")
         {
             //Stop the car
-
-            isCarDead = true;
-
-            SendFitness();
+            if (!UseUserInput)
+                isCarDead = true;
+            if (!UseUserInput)
+                SendFitness();
         }
     }
 }
