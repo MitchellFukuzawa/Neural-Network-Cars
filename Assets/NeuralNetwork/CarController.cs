@@ -20,7 +20,7 @@ public class CarController : MonoBehaviour
 
     private const float Acceleration = 200f;
     private const float TurnRate = 180;
-    private int currentCheckpoint = 0;
+    private int currentCheckpoint = 1;
     private Checkpoints[] checkpoints;
     private float TrackLength;
     private float carSpeed;
@@ -118,6 +118,7 @@ public class CarController : MonoBehaviour
         // Percentage Calculation
         int temp = currentCheckpoint - 1;
 
+        Debug.Log("Current Checkpoint : " + currentCheckpoint);
         Percentage = Vector2.Distance(checkpoints[currentCheckpoint - 1].transform.position, transform.position);
         //Debug.Log("Current chekpoint to current position : " + Percentage);
         if (currentCheckpoint != 1)

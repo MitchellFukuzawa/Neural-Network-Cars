@@ -7,9 +7,11 @@ using System;
 
 public class Manager : MonoBehaviour
 {
+    [SerializeField]
     private Checkpoints[] checkpoints;
     private float TrackLength;
     public GameObject[] CarsInSimulation;
+    public Transform spawnPosition;
 
     // Used to create the cars
     public int carPool;
@@ -87,7 +89,7 @@ public class Manager : MonoBehaviour
                 CarsInSimulation[c] = inst;
                 inst.name = "car " + c;
                 inst.GetComponent<NeuralNetwork>().initializeLayers();
-
+                inst.transform.position = checkpoints[0].transform.position;
                 int[] mathArray = CarsInSimulation[c].GetComponent<NeuralNetwork>().topology;
                 int numberOfAddedWeights = 0;
 
@@ -120,6 +122,7 @@ public class Manager : MonoBehaviour
                 GameObject inst = Instantiate(car);
                 CarsInSimulation[c] = inst;
                 inst.name = "car " + c;
+                inst.transform.position = checkpoints[0].transform.position;
 
                 inst.GetComponent<NeuralNetwork>().initializeLayers();
                 // for all layers
@@ -244,7 +247,7 @@ public class Manager : MonoBehaviour
 
         hasManagerInitialized = false;
         saveData.generation++;
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     private void OnApplicationQuit()
