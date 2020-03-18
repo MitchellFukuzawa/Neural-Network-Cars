@@ -18,8 +18,8 @@ public class CarController : MonoBehaviour
 
     public NeuralNetwork NN;
 
-    private const float Acceleration = 80f;
-    private const float TurnRate = 100;
+    private const float Acceleration = 200f;
+    private const float TurnRate = 180;
     private int currentCheckpoint = 0;
     private Checkpoints[] checkpoints;
     private float TrackLength;
@@ -69,7 +69,7 @@ public class CarController : MonoBehaviour
 
         // Get the AI values
         Vector2 AI_Movement = NN.ProccessingEvaluations(raycastDistances);
-        WeightVerticle = AI_Movement.x + .2f;
+        WeightVerticle = AI_Movement.x;
         WeightHorizontal = (AI_Movement.y);
         #region Input
         // USER input
